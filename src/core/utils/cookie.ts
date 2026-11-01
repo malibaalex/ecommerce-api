@@ -1,5 +1,5 @@
 import { Response, CookieOptions } from "express"
-import { Env } from "./env-utils.js"
+import { Env } from "./env.js"
 
 type CookieEnv = Pick<
   Env,

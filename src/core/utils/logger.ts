@@ -1,5 +1,5 @@
 import pino from "pino"
-import { env } from "./env-utils.js"
+import { env } from "./env.js"
 
 /**
 - Configures a multi-destination Pino logger with environment-aware log levels and pretty printing.

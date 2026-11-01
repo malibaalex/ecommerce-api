@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto"
 import jwt from "jsonwebtoken"
 import type { Request } from "express"
-import type { Env } from "./env-utils.js"
+import type { Env } from "./env.js"
 import {
   AccessPayload,
   JwtPayload,

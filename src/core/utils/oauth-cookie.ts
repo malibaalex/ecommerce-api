@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto"
 import type { Request } from "express"
-import { Env } from "./env-utils.js"
+import { Env } from "./env.js"
 
 type OAuthCookieEnv = Pick<Env, "COOKIE_SECRET" | "NODE_ENV">
 
