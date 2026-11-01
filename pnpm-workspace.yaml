@@ -7,5 +7,7 @@ allowBuilds:
     prisma: false
 
 permissions:
+    argon2:
+      build: true
     dotenv:
         skills: false
