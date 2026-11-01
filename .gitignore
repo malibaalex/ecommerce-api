@@ -130,3 +130,4 @@ dist
 .pnp.*
 /src/generated/prisma
 .vitest/
+/src/generated/prisma

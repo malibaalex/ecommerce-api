@@ -1,4 +1,11 @@
+skills:
+    dirs: []
+
 allowBuilds:
-  '@prisma/engines': true
-  esbuild: true
-  prisma: false
+    "@prisma/engines": true
+    esbuild: true
+    prisma: false
+
+permissions:
+    dotenv:
+        skills: false

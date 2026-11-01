@@ -1,0 +1,97 @@
+
+enum UserStatus {
+  active
+  suspended
+}
+
+
+model User {
+  id            String     @id @default(uuid()) @db.Uuid
+  email         String     @unique @db.VarChar(255) // Trimmed and lowercased by application
+  emailVerified Boolean    @default(false) @map("email_verified")
+  name          String?    @db.VarChar(255)
+  status        UserStatus @default(active)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  // Authentication methods
+  credential    Credential?
+  googleAccount GoogleAccount?
+
+  // Authentication-related records
+  otpCodes      OtpCode[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+
+model Credential {
+  userId       String   @id @map("user_id") @db.Uuid
+  passwordHash String   @map("password_hash") @db.VarChar(255) // Argon2id
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("credentials")
+}
+
+
+model GoogleAccount {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @map("user_id") @db.Uuid
+  googleSub String   @unique @map("google_sub") @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("google_accounts")
+}
+
+
+model OAuthTransaction {
+  id           String   @id @default(uuid()) @db.Uuid
+  state        String   @unique @db.VarChar(128)
+  codeVerifier String   @map("code_verifier") @db.VarChar(128)
+
+  expiresAt DateTime @map("expires_at") @db.Timestamptz()
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([expiresAt])
+  @@map("oauth_transactions")
+}
+
+
+model OtpCode {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  purpose    String    @db.VarChar(30) // email_verification | password_reset
+  codeHash   String    @map("code_hash") @db.VarChar(64)
+  attempts   Int       @default(0)
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz()
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose, createdAt])
+  @@index([expiresAt])
+  @@map("otp_codes")
+}
+
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @unique @db.VarChar(64) // SHA-256 hex of raw token
+  userId    String   @map("user_id") @db.Uuid
+  expiresAt DateTime @map("expires_at") @db.Timestamptz()
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
