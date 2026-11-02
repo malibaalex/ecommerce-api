@@ -2,8 +2,8 @@ import UpsertGoogleUserService from "./google-account-upsert.js"
 
 const UpsertGoogleUser = new UpsertGoogleUserService()
 
-const GoogleAccountServices = {
+const GoogleAccount = {
   UpsertGoogleUser,
 }
 
-export default GoogleAccountServices
+export default GoogleAccount

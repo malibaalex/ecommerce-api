@@ -4,9 +4,9 @@ import VerifyOtpCodeService from "./otp-code-verify.js"
 const CreateOtpCode = new CreateOtpCodeService()
 const VerifyOtpCode = new VerifyOtpCodeService()
 
-const OtpCodeServices = {
+const OtpCode = {
   CreateOtpCode,
   VerifyOtpCode,
 }
 
-export default OtpCodeServices
+export default OtpCode

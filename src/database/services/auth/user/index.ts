@@ -8,11 +8,11 @@ const GetUserById = new GetUserByIdService()
 const GetUserByEmail = new GetOneUserByEmailService()
 const UpdateUser = new UpdateUserService()
 
-const UserServices = {
+const User = {
   CreateUser,
   GetUserById,
   GetUserByEmail,
   UpdateUser,
 }
 
-export default UserServices
+export default User

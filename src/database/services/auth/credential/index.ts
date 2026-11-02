@@ -2,8 +2,8 @@ import VerifyCredentialService from "./credential-verify.js"
 
 const VerifyCredential = new VerifyCredentialService()
 
-const CredentialServices = {
+const Credential = {
   VerifyCredential,
 }
 
-export default CredentialServices
+export default Credential
