@@ -1,15 +1,22 @@
 import BaseService from "@/database/system/base-service.js"
-import { Credential } from "@/generated/prisma/client.js"
+import { Credential, User } from "@/generated/prisma/client.js"
 import { SignIn } from "@/types/user.js"
 
-class VerifyCredentialService extends BaseService<SignIn, Credential> {
-  protected async transaction(data: SignIn): Promise<Credential | null> {
+type CredentialWithUser = Credential & { user: User }
+
+class VerifyCredentialService extends BaseService<SignIn, CredentialWithUser> {
+  protected async transaction(
+    data: SignIn,
+  ): Promise<CredentialWithUser | null> {
+    const email = data.email.toLowerCase().trim()
+
     const user = await this.database.user.findUnique({
-      where: { email: data.email.toLowerCase().trim() },
+      where: { email },
       include: { credential: true },
     })
 
-    if (!user || !user.credential) {
+    // Check if user exists, has password credentials, and is active
+    if (!user || !user.credential || user.status === "suspended") {
       return null
     }
 
@@ -22,7 +29,10 @@ class VerifyCredentialService extends BaseService<SignIn, Credential> {
       return null
     }
 
-    return user.credential
+    return {
+      ...user.credential,
+      user,
+    }
   }
 }
 
