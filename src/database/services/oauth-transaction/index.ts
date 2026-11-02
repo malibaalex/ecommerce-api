@@ -1,5 +1,5 @@
-import ConsumeOAuthTransactionService from "./consume-oauth-transaction.js"
-import CreateOAuthTransactionService from "./create-oauth-transaction.js"
+import ConsumeOAuthTransactionService from "./oauth-transaction-consume.js"
+import CreateOAuthTransactionService from "./oauth-transaction-create.js"
 
 const CreateOAuthTransaction = new CreateOAuthTransactionService()
 const ConsumeOAuthTransaction = new ConsumeOAuthTransactionService()

@@ -1,6 +1,6 @@
-import SaveRefreshTokenService from "@/database/services/refresh-token/save-refresh-token.js"
-import RevokeRefreshTokenService from "@/database/services/refresh-token/revoke-refresh-token.js"
-import RotateRefreshTokenService from "./rotate-refresh-token.js"
+import SaveRefreshTokenService from "@/database/services/refresh-token/refresh-token-save.js"
+import RevokeRefreshTokenService from "@/database/services/refresh-token/refresh-token-revoke.js"
+import RotateRefreshTokenService from "./refresh-token-rotate.js"
 
 const SaveRefreshToken = new SaveRefreshTokenService()
 const RotateRefreshToken = new RotateRefreshTokenService()
