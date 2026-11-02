@@ -8,11 +8,11 @@ const SignInUser = new SignInUserValidator()
 const VerifyOtp = new VerifyOtpValidator()
 const ResetPassword = new ResetPasswordValidator()
 
-const Auth = {
+const Authenticate = {
   SignupUser,
   SignInUser,
   VerifyOtp,
   ResetPassword,
 }
 
-export default Auth
+export default Authenticate

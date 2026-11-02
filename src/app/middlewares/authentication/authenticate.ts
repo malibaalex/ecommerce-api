@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import BaseMiddleWare from "@/core/base/base-middleware.js"
 
-class UserAuthentication extends BaseMiddleWare {
+class UserAuthenticate extends BaseMiddleWare {
   protected async middleware(
     req: Request,
     res: Response,
@@ -37,4 +37,4 @@ class UserAuthentication extends BaseMiddleWare {
   }
 }
 
-export default UserAuthentication
+export default UserAuthenticate

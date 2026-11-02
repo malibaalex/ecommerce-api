@@ -1,5 +1,5 @@
-import Auth from "./auth/index.js"
+import Authenticate from "./authentication/index.js"
 
-const MiddleWares = { Auth }
+const MiddleWares = { Authenticate }
 
 export default MiddleWares

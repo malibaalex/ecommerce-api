@@ -1,9 +1,9 @@
-import Auth from "./auth/index.js"
+import Authenticate from "./authentication/index.js"
 import User from "./user/index.js"
 
 const Services = {
   User,
-  Auth,
+  Authenticate,
 }
 
 export default Services

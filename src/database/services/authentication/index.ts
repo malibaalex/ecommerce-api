@@ -4,7 +4,7 @@ import Credential from "./credential/index.js"
 import GoogleAccount from "./google-account/index.js"
 import OtpCode from "./otp-code/index.js"
 
-const Auth = {
+const Authenticate = {
   OAuthTransaction,
   RefreshToken,
   Credential,
@@ -12,4 +12,4 @@ const Auth = {
   OtpCode,
 }
 
-export default Auth
+export default Authenticate
