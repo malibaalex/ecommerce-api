@@ -7,18 +7,18 @@ import omitProperty from "./omit-property.js"
 import TokenUtils from "./token.js"
 import isGoogleUser from "./user-utils.js"
 
-const tokenUtils = new TokenUtils(env)
-const cookieUtils = new CookieUtils(env)
-const oauthCookieUtils = new OAuthCookieUtil(env)
-const passwordUtil = new PasswordUtil()
+const Token = new TokenUtils(env)
+const Cookie = new CookieUtils(env)
+const OauthCookie = new OAuthCookieUtil(env)
+const Password = new PasswordUtil()
 
 export const Utils = {
   port,
   omitProperty,
-  password: passwordUtil,
-  token: tokenUtils,
-  cookie: cookieUtils,
-  oauthCookie: oauthCookieUtils,
+  Password,
+  Token,
+  Cookie,
+  OauthCookie,
   isGoogleUser,
   env,
 } as const

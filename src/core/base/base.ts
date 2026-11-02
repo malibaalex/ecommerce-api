@@ -6,7 +6,7 @@ import logger from "../utils/logger.js"
 
 class Base {
   protected readonly Utils = Utils
-  protected readonly Service = Services
+  protected readonly Services = Services
 
   protected respond(
     res: Response,
