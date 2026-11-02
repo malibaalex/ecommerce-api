@@ -1,11 +1,11 @@
-import port from "./port-utils.js"
-import { PasswordUtil } from "./password-utils.js"
+import port from "./port.js"
+import { PasswordUtil } from "./password.js"
 import { env } from "./env.js"
 import { CookieUtils } from "./cookie.js"
-import { OAuthCookieUtil } from "./oauth-cookie-util.js"
-import omitProperty from "./omit-property-utils.js"
-import TokenUtils from "./token-utils.js"
-import logger from "./logger-utils.js"
+import { OAuthCookieUtil } from "./oauth-cookie.js"
+import omitProperty from "./omit-property.js"
+import TokenUtils from "./token.js"
+import logger from "./logger.js"
 import isGoogleUser from "./user-utils.js"
 
 const tokenUtils = new TokenUtils(env)
