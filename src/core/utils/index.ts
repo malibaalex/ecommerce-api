@@ -5,7 +5,6 @@ import { CookieUtils } from "./cookie.js"
 import { OAuthCookieUtil } from "./oauth-cookie.js"
 import omitProperty from "./omit-property.js"
 import TokenUtils from "./token.js"
-import logger from "./logger.js"
 import isGoogleUser from "./user-utils.js"
 
 const tokenUtils = new TokenUtils(env)
@@ -20,7 +19,6 @@ export const Utils = {
   token: tokenUtils,
   cookie: cookieUtils,
   oauthCookie: oauthCookieUtils,
-  logger,
   isGoogleUser,
   env,
 } as const
