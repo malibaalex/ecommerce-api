@@ -27,7 +27,6 @@ abstract class BaseMiddleWare extends Base {
     schema: z.ZodType,
   ): Response | void => this.validate(req.query, res, next, schema)
 
-  // the three handlers above were identical except for the input they read
   private validate = (
     input: unknown,
     res: Response,
@@ -35,11 +34,14 @@ abstract class BaseMiddleWare extends Base {
     schema: z.ZodType,
   ): Response | void => {
     const result = schema.safeParse(input)
+
     return result.success ? next() : this.zodError(res, result.error)
   }
 
-  zodError = (res: Response, error: ZodError): Response =>
-    this.respond(res, "BAD_REQUEST", { message: error.issues[0].message })
+  public zodError = (res: Response, error: ZodError): Response =>
+    this.respond(res, "BAD_REQUEST", {
+      message: error.issues[0].message,
+    })
 
   protected abstract middleware(
     req: Request,
@@ -56,7 +58,10 @@ abstract class BaseMiddleWare extends Base {
       await this.middleware(req, res, next)
     } catch (error) {
       req.log.error({ err: error }, "Middleware error")
-      this.respond(res, "SERVER_ERROR")
+
+      if (!res.headersSent) {
+        this.respond(res, "SERVER_ERROR")
+      }
     }
   }
 }

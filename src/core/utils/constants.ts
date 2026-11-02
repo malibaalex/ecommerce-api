@@ -1,8 +1,8 @@
 export const PORT = "4001"
 
 /**
-- Defines standardized HTTP status code mappings for consistent API responses.
-- Exports matching response messages and a compound response key type.
+ * Defines standardized HTTP status code mappings for consistent API responses.
+ * Exports matching response messages and a compound response key type.
  */
 export const HTTP_STATUS = {
   SUCCESS: 200,
@@ -13,6 +13,7 @@ export const HTTP_STATUS = {
   NOT_FOUND: 404,
   METHOD_NOT_ALLOWED: 405,
   CONFLICT: 409,
+  TOO_MANY_REQUESTS: 429,
   SERVER_ERROR: 500,
 } as const
 
@@ -21,15 +22,17 @@ export const HTTP_MSG = {
   CREATED: "created successfully",
   BAD_REQUEST: "bad request",
   UNAUTHORIZED: "unauthorized",
-  NOT_FOUND: "not found",
-  CONFLICT: "conflict",
   FORBIDDEN: "forbidden",
+  NOT_FOUND: "not found",
+  METHOD_NOT_ALLOWED: "method not allowed",
+  CONFLICT: "conflict",
+  TOO_MANY_REQUESTS: "too many requests",
   SERVER_ERROR: "server error",
+
   WELCOME: "welcome to the API",
   INVALID_ROUTE: "invalid route",
   INVALID_METHOD: "invalid method",
   ALREADY_EXISTS: "already exists",
-  METHOD_NOT_ALLOWED: "method not allowed",
 } as const
 
 export type ResponseKey = keyof typeof HTTP_STATUS & keyof typeof HTTP_MSG
