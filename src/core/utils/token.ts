@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto"
+import { createHash, randomUUID } from "crypto"
 import jwt from "jsonwebtoken"
 import type { Request } from "express"
 import type { Env } from "./env.js"
@@ -79,6 +79,10 @@ class TokenUtils {
     } catch {
       return null
     }
+  }
+
+  hashRefresh(token: string): string {
+    return createHash("sha256").update(token).digest("hex")
   }
 }
 

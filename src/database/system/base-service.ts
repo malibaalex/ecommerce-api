@@ -2,13 +2,13 @@ import { Utils } from "@/core/utils/index.js"
 import { prisma } from "./db.js"
 import { Page, Pagination } from "@/types/db.js"
 
-const { password, env, token } = Utils
+const { Password, env, Token } = Utils
 
 abstract class BaseService<TData = unknown, TResult = unknown> {
   protected database = prisma
   protected env = env
-  protected Password = password
-  protected token = token
+  protected Password = Password
+  protected Token = Token
 
   protected readonly PAGE_SIZE = 10
 

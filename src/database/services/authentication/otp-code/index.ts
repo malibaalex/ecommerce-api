@@ -1,12 +1,12 @@
 import CreateOtpCodeService from "./otp-code-create.js"
 import VerifyOtpCodeService from "./otp-code-verify.js"
 
-const CreateOtpCode = new CreateOtpCodeService()
-const VerifyOtpCode = new VerifyOtpCodeService()
+const Create = new CreateOtpCodeService()
+const Verify = new VerifyOtpCodeService()
 
 const OtpCode = {
-  CreateOtpCode,
-  VerifyOtpCode,
+  Create,
+  Verify,
 }
 
 export default OtpCode

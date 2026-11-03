@@ -3,16 +3,16 @@ import GetUserByIdService from "./user-get-by-id.js"
 import GetOneUserByEmailService from "./user-get-one-by-email.js"
 import UpdateUserService from "./user-update.js"
 
-const CreateUser = new CreateUserService()
-const GetUserById = new GetUserByIdService()
-const GetUserByEmail = new GetOneUserByEmailService()
-const UpdateUser = new UpdateUserService()
+const Create = new CreateUserService()
+const GetById = new GetUserByIdService()
+const GetByEmail = new GetOneUserByEmailService()
+const Update = new UpdateUserService()
 
 const User = {
-  CreateUser,
-  GetUserById,
-  GetUserByEmail,
-  UpdateUser,
+  Create,
+  GetById,
+  GetByEmail,
+  Update,
 }
 
 export default User

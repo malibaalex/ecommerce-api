@@ -1,9 +1,12 @@
+import ResetCredentialService from "./credential-reset.js"
 import VerifyCredentialService from "./credential-verify.js"
 
-const VerifyCredential = new VerifyCredentialService()
+const Verify = new VerifyCredentialService()
+const Reset = new ResetCredentialService()
 
 const Credential = {
-  VerifyCredential,
+  Verify,
+  Reset,
 }
 
 export default Credential

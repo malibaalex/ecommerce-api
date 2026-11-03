@@ -13,7 +13,7 @@ class RotateRefreshTokenService extends BaseService<
     data: RotateRefreshTokenInput,
   ): Promise<RefreshToken | null> {
     const oldToken = await this.database.refreshToken.findUnique({
-      where: { token: data.oldToken },
+      where: { token: this.Token.hashRefresh(data.oldToken) },
     })
 
     if (!oldToken) return null
@@ -29,11 +29,11 @@ class RotateRefreshTokenService extends BaseService<
       where: { id: oldToken.id },
     })
 
-    const newToken = this.token.signRefresh({ userId: oldToken.userId })
+    const newToken = this.Token.signRefresh({ userId: oldToken.userId })
 
     return await this.database.refreshToken.create({
       data: {
-        token: newToken,
+        token: this.Token.hashRefresh(newToken),
         userId: oldToken.userId,
         expiresAt: new Date(
           Date.now() + this.env.JWT_REFRESH_SECRET_KEY_EXPIRES_IN * 1000,

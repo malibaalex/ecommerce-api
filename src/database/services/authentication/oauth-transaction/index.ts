@@ -1,12 +1,12 @@
 import CreateOAuthTransactionService from "./oauth-transaction-create.js"
 import ConsumeOAuthTransactionService from "./oauth-transaction-consume.js"
 
-const CreateOAuthTransaction = new CreateOAuthTransactionService()
-const ConsumeOAuthTransaction = new ConsumeOAuthTransactionService()
+const Create = new CreateOAuthTransactionService()
+const Consume = new ConsumeOAuthTransactionService()
 
 const OAuthTransaction = {
-  CreateOAuthTransaction,
-  ConsumeOAuthTransaction,
+  Create,
+  Consume,
 }
 
 export default OAuthTransaction

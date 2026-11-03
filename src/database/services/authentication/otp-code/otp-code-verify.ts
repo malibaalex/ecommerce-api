@@ -1,10 +1,11 @@
+import OtpHasher from "@/core/utils/otp.js"
 import BaseService from "@/database/system/base-service.js"
 import { OtpCode } from "@/generated/prisma/client.js"
 
 interface VerifyOtpInput {
   userId: string
   purpose: string
-  codeHash: string
+  code: string // raw code, not a hash
 }
 
 class VerifyOtpCodeService extends BaseService<VerifyOtpInput, OtpCode> {
@@ -21,15 +22,12 @@ class VerifyOtpCodeService extends BaseService<VerifyOtpInput, OtpCode> {
       orderBy: { createdAt: "desc" },
     })
 
-    if (!otpCode) {
-      return null
-    }
+    if (!otpCode) return null
 
-    if (otpCode.attempts >= 5) {
-      return null
-    }
+    if (otpCode.attempts >= 5) return null
 
-    if (otpCode.codeHash !== data.codeHash) {
+    const valid = await OtpHasher.verify(data.code, otpCode.codeHash)
+    if (!valid) {
       await this.database.otpCode.update({
         where: { id: otpCode.id },
         data: { attempts: { increment: 1 } },
@@ -37,7 +35,6 @@ class VerifyOtpCodeService extends BaseService<VerifyOtpInput, OtpCode> {
       return null
     }
 
-    // Mark code as consumed
     const consumed = await this.database.otpCode.update({
       where: { id: otpCode.id },
       data: { consumedAt: now },

@@ -15,7 +15,7 @@ class SaveRefreshTokenService extends BaseService<
   ): Promise<RefreshToken | null> {
     return await this.database.refreshToken.create({
       data: {
-        token: data.token,
+        token: this.Token.hashRefresh(data.token),
         userId: data.userId,
         expiresAt: new Date(
           Date.now() + this.env.JWT_REFRESH_SECRET_KEY_EXPIRES_IN * 1000,

@@ -37,7 +37,7 @@ export type UpdateUser = {
 
 export type JwtPayload = {
   payload: {
-    userId: string
+    id: string
     email: string
     name: string | null
     status: UserStatus

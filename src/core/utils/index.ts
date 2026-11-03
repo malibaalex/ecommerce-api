@@ -3,9 +3,10 @@ import { PasswordUtil } from "./password.js"
 import { env } from "./env.js"
 import { CookieUtils } from "./cookie.js"
 import { OAuthCookieUtil } from "./oauth-cookie.js"
-import omitProperty from "./omit-property.js"
+import OmitProperty from "./omit-property.js"
 import TokenUtils from "./token.js"
-import isGoogleUser from "./user-utils.js"
+import IsGoogleUser from "./user-utils.js"
+import GoogleProfile from "./google-profile.js"
 
 const Token = new TokenUtils(env)
 const Cookie = new CookieUtils(env)
@@ -14,11 +15,12 @@ const Password = new PasswordUtil()
 
 export const Utils = {
   port,
-  omitProperty,
+  OmitProperty,
   Password,
   Token,
   Cookie,
   OauthCookie,
-  isGoogleUser,
+  IsGoogleUser,
   env,
+  GoogleProfile,
 } as const
