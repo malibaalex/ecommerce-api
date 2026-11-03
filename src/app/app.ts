@@ -13,6 +13,7 @@ import Base from "@/core/base/base.js"
 import logger from "@/core/utils/logger.js"
 import { IRoute } from "@/types/app.js"
 import ErrorHandler from "./middlewares/error-handler.js"
+import path from "path"
 
 type RouteInput = IRoute | Router | { router: Router } | Record<string, unknown>
 
@@ -30,6 +31,7 @@ class App extends Base {
   }
 
   private initMiddlewares(): void {
+    this.app.use(express.static(path.join(process.cwd(), "public")))
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: true }))
     this.app.use(cookieParser())
