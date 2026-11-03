@@ -1,7 +1,7 @@
 import BaseMiddleWare from "@/core/base/base-middleware.js"
 import { Request, Response, NextFunction } from "express"
 
-class SignupUserValidator extends BaseMiddleWare {
+class SignInValidator extends BaseMiddleWare {
   protected async middleware(
     req: Request,
     res: Response,
@@ -11,19 +11,11 @@ class SignupUserValidator extends BaseMiddleWare {
       email: this.z
         .email("Invalid email format")
         .transform((val) => val.toLowerCase().trim()),
-      name: this.z
-        .string()
-        .min(2, "Name must be at least 2 characters")
-        .max(255)
-        .optional(),
-      password: this.z
-        .string()
-        .min(8, "Password must be at least 8 characters")
-        .max(100),
+      password: this.z.string().min(1, "Password is required"),
     })
 
     this.bodyHandler(req, res, next, schema)
   }
 }
 
-export default SignupUserValidator
+export default SignInValidator

@@ -1,12 +1,22 @@
 import { Request, RequestHandler, Response, Router } from "express"
-
 import Base from "@/core/base/base.js"
-import { IController, IMiddleware, IRoute } from "@/types/app.js"
+import RateLimit from "./rate-limit/index.js"
+import {
+  HttpMethod,
+  IController,
+  IMiddleware,
+  IRoute,
+  IValidator,
+} from "@/types/app.js"
+
+// Infer options type from RateLimit.create
+type RateLimitOptions = Parameters<typeof RateLimit.create>[0]
 
 interface RouteConfig {
-  method: "get" | "post" | "put" | "patch" | "delete"
+  method: HttpMethod
   route: string
-  rateLimit?: RequestHandler
+  rateLimit?: RateLimitOptions | boolean // Pass options or true for defaults
+  validators?: IValidator[]
   middlewares?: IMiddleware[]
   controller: IController
 }
@@ -20,14 +30,24 @@ class BaseRoute extends Base implements IRoute {
   ) {
     super()
 
-    const handlers: RequestHandler[] = [
-      ...(config.rateLimit ? [config.rateLimit] : []),
+    const toHandler =
+      (m: IMiddleware | IValidator): RequestHandler =>
+      (req, res, next) =>
+        m.run(req, res, next)
 
-      ...(config.middlewares ?? []).map(
-        (m): RequestHandler =>
-          (req, res, next) =>
-            m.run(req, res, next),
-      ),
+    // Automatically instantiate the rate limiter inside BaseRoute
+    let rateLimitHandler: RequestHandler | undefined
+    if (config.rateLimit) {
+      const options =
+        typeof config.rateLimit === "object" ? config.rateLimit : {}
+      rateLimitHandler = RateLimit.create(options)
+    }
+
+    // Order: rate limit -> validators -> middlewares -> controller
+    const handlers: RequestHandler[] = [
+      ...(rateLimitHandler ? [rateLimitHandler] : []),
+      ...(config.validators ?? []).map(toHandler),
+      ...(config.middlewares ?? []).map(toHandler),
 
       async (req: Request, res: Response): Promise<void> => {
         try {

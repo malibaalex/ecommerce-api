@@ -22,9 +22,7 @@ class UserAuthenticate extends BaseMiddleWare {
       return
     }
 
-    const user = await this.Services.User.GetUserById.call(
-      payload.payload.userId,
-    )
+    const user = await this.Services.User.GetById.call(payload.payload.id)
     if (!user) {
       this.respond(res, "UNAUTHORIZED", {
         message: "User not found or inactive",

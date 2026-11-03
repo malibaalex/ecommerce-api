@@ -1,17 +1,16 @@
-import SignupUserValidator from "./sign-up-user.js"
-import SignInUserValidator from "./sign-in-user.js"
-import VerifyOtpValidator from "./verify-otp.js"
+import SignupValidator from "./sign-up.js"
+import SignInValidator from "./sign-in.js"
 import ResetPasswordValidator from "./reset-password.js"
+import Otp from "./otp/index.js"
 
-const SignupUser = new SignupUserValidator()
-const SignInUser = new SignInUserValidator()
-const VerifyOtp = new VerifyOtpValidator()
+const SignUp = new SignupValidator()
+const SignIn = new SignInValidator()
 const ResetPassword = new ResetPasswordValidator()
 
 const Authenticate = {
-  SignupUser,
-  SignInUser,
-  VerifyOtp,
+  SignUp,
+  SignIn,
+  Otp,
   ResetPassword,
 }
 

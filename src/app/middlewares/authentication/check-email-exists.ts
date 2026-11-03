@@ -9,7 +9,7 @@ class CheckEmailExists extends BaseMiddleWare {
   ): Promise<void> {
     const { email } = req.body
 
-    const user = await this.Services.User.GetUserByEmail.call(email)
+    const user = await this.Services.User.GetByEmail.call(email)
 
     if (user) {
       this.respond(res, "CONFLICT", {

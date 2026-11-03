@@ -6,7 +6,7 @@ import googleStrategy, {
 
 type LoginErrorCode = GoogleAuthErrorCode | "account_suspended" | "server_error"
 
-class GoogleAuthCallbackController extends BaseControlller {
+class GoogleCallbackController extends BaseControlller {
   protected async module(
     req: Request,
     res: Response,
@@ -49,4 +49,4 @@ class GoogleAuthCallbackController extends BaseControlller {
   }
 }
 
-export default GoogleAuthCallbackController
+export default GoogleCallbackController

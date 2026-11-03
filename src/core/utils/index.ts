@@ -7,11 +7,13 @@ import OmitProperty from "./omit-property.js"
 import TokenUtils from "./token.js"
 import IsGoogleUser from "./user-utils.js"
 import GoogleProfile from "./google-profile.js"
+import RateLimitUtils from "./rate-limit.js"
 
 const Token = new TokenUtils(env)
 const Cookie = new CookieUtils(env)
 const OauthCookie = new OAuthCookieUtil(env)
 const Password = new PasswordUtil()
+const RateLimits = new RateLimitUtils()
 
 export const Utils = {
   port,
@@ -23,4 +25,5 @@ export const Utils = {
   IsGoogleUser,
   env,
   GoogleProfile,
+  RateLimits,
 } as const

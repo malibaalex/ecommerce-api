@@ -13,9 +13,18 @@ export interface IMiddleware {
   run: (req: Request, res: Response, next: NextFunction) => Promise<void>
 }
 
+export type IValidator = IMiddleware
+
 export interface IRoute {
   path: string
   router: Router
+}
+
+export interface RateLimitOptions {
+  windowMs: number
+  limit: number
+  keyGenerator?: (req: Request) => string
+  message?: string
 }
 
 /**

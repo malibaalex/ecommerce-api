@@ -11,31 +11,53 @@ abstract class BaseMiddleWare extends Base {
     res: Response,
     next: NextFunction,
     schema: z.ZodType,
-  ): Response | void => this.validate(req.body, res, next, schema)
+  ): Response | void =>
+    this.validate(req.body, res, next, schema, (data) => {
+      req.body = data
+    })
 
   protected paramHandler = (
     req: Request,
     res: Response,
     next: NextFunction,
     schema: z.ZodType,
-  ): Response | void => this.validate(req.params, res, next, schema)
+  ): Response | void =>
+    this.validate(req.params, res, next, schema, (data) => {
+      req.params = data as typeof req.params
+    })
 
   protected queryHandler = (
     req: Request,
     res: Response,
     next: NextFunction,
     schema: z.ZodType,
-  ): Response | void => this.validate(req.query, res, next, schema)
+  ): Response | void =>
+    this.validate(req.query, res, next, schema, (data) => {
+      // req.query is getter-only in Express 5, so redefine it.
+      // On Express 4 a plain `req.query = data as typeof req.query` also works.
+      Object.defineProperty(req, "query", {
+        value: data,
+        writable: true,
+        configurable: true,
+      })
+    })
 
+  /**
+   * Validates `input` and, on success, hands the parsed data to `apply` so
+   * transforms, defaults and stripped keys reach the controller.
+   */
   private validate = (
     input: unknown,
     res: Response,
     next: NextFunction,
     schema: z.ZodType,
+    apply: (data: unknown) => void,
   ): Response | void => {
     const result = schema.safeParse(input)
+    if (!result.success) return this.zodError(res, result.error)
 
-    return result.success ? next() : this.zodError(res, result.error)
+    apply(result.data)
+    return next()
   }
 
   public zodError = (res: Response, error: ZodError): Response =>

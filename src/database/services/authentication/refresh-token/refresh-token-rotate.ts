@@ -1,45 +1,51 @@
 import BaseService from "@/database/system/base-service.js"
-import { type RefreshToken } from "@/generated/prisma/client.js"
+import type { User } from "@/generated/prisma/client.js"
 
 interface RotateRefreshTokenInput {
   oldToken: string
 }
 
+interface RotateRefreshTokenResult {
+  token: string // raw, goes into the cookie
+  user: User
+}
+
 class RotateRefreshTokenService extends BaseService<
   RotateRefreshTokenInput,
-  RefreshToken
+  RotateRefreshTokenResult
 > {
   protected async transaction(
     data: RotateRefreshTokenInput,
-  ): Promise<RefreshToken | null> {
-    const oldToken = await this.database.refreshToken.findUnique({
+  ): Promise<RotateRefreshTokenResult | null> {
+    const stored = await this.database.refreshToken.findUnique({
       where: { token: this.Token.hashRefresh(data.oldToken) },
+      include: { user: true },
     })
+    if (!stored) return null
 
-    if (!oldToken) return null
+    // Atomic claim: only one concurrent request can delete the row
+    const { count } = await this.database.refreshToken.deleteMany({
+      where: { id: stored.id },
+    })
+    if (count === 0) return null
 
-    if (oldToken.expiresAt < new Date()) {
-      await this.database.refreshToken.delete({
-        where: { id: oldToken.id },
-      })
+    if (stored.expiresAt < new Date() || stored.user.status === "suspended") {
       return null
     }
 
-    await this.database.refreshToken.delete({
-      where: { id: oldToken.id },
-    })
+    const token = this.Token.signRefresh({ userId: stored.userId })
 
-    const newToken = this.Token.signRefresh({ userId: oldToken.userId })
-
-    return await this.database.refreshToken.create({
+    await this.database.refreshToken.create({
       data: {
-        token: this.Token.hashRefresh(newToken),
-        userId: oldToken.userId,
+        token: this.Token.hashRefresh(token),
+        userId: stored.userId,
         expiresAt: new Date(
           Date.now() + this.env.JWT_REFRESH_SECRET_KEY_EXPIRES_IN * 1000,
         ),
       },
     })
+
+    return { token, user: stored.user }
   }
 }
 
