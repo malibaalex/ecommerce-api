@@ -8,19 +8,18 @@ class VerifyOtpController extends BaseControlller {
   ): Promise<void | Response> {
     const { email, code, purpose } = req.body
 
-    const user = await this.Services.User.GetUserByEmail.call(email)
+    const user = await this.Services.User.GetByEmail.call(email)
     if (!user) {
       return this.respond(res, "BAD_REQUEST", {
         message: "Invalid or expired OTP code",
       })
     }
 
-    const verifiedOtp =
-      await this.Services.Authenticate.OtpCode.VerifyOtpCode.call({
-        userId: user.id,
-        purpose,
-        code,
-      })
+    const verifiedOtp = await this.Services.Authenticate.OtpCode.Verify.call({
+      userId: user.id,
+      purpose,
+      code,
+    })
 
     if (!verifiedOtp) {
       return this.respond(res, "BAD_REQUEST", {
@@ -29,7 +28,7 @@ class VerifyOtpController extends BaseControlller {
     }
 
     if (purpose === "email_verification") {
-      await this.Services.User.UpdateUser.call({
+      await this.Services.User.Update.call({
         userId: user.id,
         emailVerified: true,
       })

@@ -1,13 +1,13 @@
 skills:
-    dirs: []
+  dirs: []
 
 allowBuilds:
-    "@prisma/engines": true
-    esbuild: true
-    prisma: false
+  "@prisma/engines": true
+  esbuild: true
+  prisma: false
 
 permissions:
-    argon2:
-      build: true
-    dotenv:
-        skills: false
+  argon2:
+    build: true
+  dotenv:
+    skills: false

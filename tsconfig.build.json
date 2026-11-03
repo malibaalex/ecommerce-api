@@ -1,9 +1,15 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "dist"
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "docker-compose*.yml"]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "**/*.test.ts",
+    "docker-compose*.yml"
+  ]
 }
