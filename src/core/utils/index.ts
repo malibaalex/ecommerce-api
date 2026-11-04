@@ -8,12 +8,14 @@ import TokenUtils from "./token.js"
 import IsGoogleUser from "./user-utils.js"
 import GoogleProfile from "./google-profile.js"
 import RateLimitUtils from "./rate-limit.js"
+import OtpHasherUtil from "./otp.js"
 
 const Token = new TokenUtils(env)
 const Cookie = new CookieUtils(env)
 const OauthCookie = new OAuthCookieUtil(env)
 const Password = new PasswordUtil()
 const RateLimits = new RateLimitUtils()
+const OtpHasher = new OtpHasherUtil()
 
 export const Utils = {
   port,
@@ -26,4 +28,5 @@ export const Utils = {
   env,
   GoogleProfile,
   RateLimits,
+  OtpHasher,
 } as const

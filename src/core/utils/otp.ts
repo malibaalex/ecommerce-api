@@ -42,6 +42,4 @@ class OtpHasherUtil {
   }
 }
 
-const OtpHasher = new OtpHasherUtil()
-
-export default OtpHasher
+export default OtpHasherUtil

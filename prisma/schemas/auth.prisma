@@ -6,35 +6,21 @@ enum UserStatus {
 
 
 model User {
-  id            String     @id @default(uuid()) @db.Uuid
-  email         String     @unique @db.VarChar(255) // Trimmed and lowercased by application
-  emailVerified Boolean    @default(false) @map("email_verified")
-  name          String?    @db.VarChar(255)
-  status        UserStatus @default(active)
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique @db.VarChar(255) // Trimmed and lowercased by application
+  isVerified   Boolean    @default(false) @map("is_verified")
+  name         String?    @db.VarChar(255)
+  passwordHash String?    @map("password_hash") @db.VarChar(255) // Argon2id
+  status       UserStatus @default(active)
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 
-  // Authentication methods
-  credential    Credential?
-  googleAccount GoogleAccount?
-
-  // Authentication-related records
-  otpCodes      OtpCode[]
-  refreshTokens RefreshToken[]
+  googleAccount  GoogleAccount?
+  signInSessions SignInSession[]
+  refreshTokens  RefreshToken[]
 
   @@map("users")
-}
-
-
-model Credential {
-  userId       String   @id @map("user_id") @db.Uuid
-  passwordHash String   @map("password_hash") @db.VarChar(255) // Argon2id
-  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz()
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("credentials")
 }
 
 
@@ -63,24 +49,36 @@ model OAuthTransaction {
   @@map("oauth_transactions")
 }
 
+model SignInSession {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz()
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  otpCodes OtpCode[]
+
+  @@index([userId, createdAt])
+  @@index([expiresAt])
+  @@map("sign_in_sessions")
+}
 
 model OtpCode {
   id         String    @id @default(uuid()) @db.Uuid
-  userId     String    @map("user_id") @db.Uuid
-  purpose    String    @db.VarChar(30) // email_verification | password_reset
-  codeHash   String    @map("code_hash") @db.VarChar(64)
+  sessionId  String    @map("session_id") @db.Uuid
+  codeHash   String    @map("code_hash") @db.VarChar(255) // salt$p$m$t$hash, ~107 chars
   attempts   Int       @default(0)
   expiresAt  DateTime  @map("expires_at") @db.Timestamptz()
   consumedAt DateTime? @map("consumed_at") @db.Timestamptz()
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session SignInSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  @@index([userId, purpose, createdAt])
+  @@index([sessionId])
   @@index([expiresAt])
   @@map("otp_codes")
 }
-
 
 model RefreshToken {
   id        String   @id @default(uuid()) @db.Uuid
