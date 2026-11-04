@@ -7,24 +7,19 @@ import { UserStatus } from "@/generated/prisma/enums.ts"
 export interface GoogleIdentity {
   googleSub: string
   email: string
-  emailVerified: true
+  isVerified: true
   name: string | null
 }
 
-// User row + Google identity. Omit avoids "cannot extend" clashes where
-// both sides declare the same field with slightly different types.
 export interface GoogleUser
-  extends Omit<User, keyof GoogleIdentity>, GoogleIdentity {}
+  extends Omit<SafeUser, keyof GoogleIdentity>, GoogleIdentity {}
 
-export type Signup = {
+export interface UserAuthState {
+  id: string
   email: string
-  name?: string
-  password: string
-}
-
-export type SignIn = {
-  email: string
-  password: string
+  status: UserStatus
+  isVerified: boolean
+  hasPassword: boolean
 }
 
 export type UpdateUser = {
@@ -32,7 +27,7 @@ export type UpdateUser = {
   email?: string
   name?: string
   status?: UserStatus
-  emailVerified?: boolean
+  isVerified?: boolean
 }
 
 export type JwtPayload = {
@@ -41,7 +36,7 @@ export type JwtPayload = {
     email: string
     name: string | null
     status: UserStatus
-    emailVerified: boolean
+    isVerified: boolean
     createdAt: Date
     updatedAt: Date
   }
@@ -50,9 +45,7 @@ export type JwtPayload = {
 }
 
 export type AccessPayload = Omit<JwtPayload, "iat" | "exp">
-
 export type RefreshPayload = { userId: string }
-
 export type VerifiedRefreshPayload = RefreshPayload & {
   iat: number
   exp: number

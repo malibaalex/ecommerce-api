@@ -6,7 +6,7 @@ class UpdateUserService extends BaseService<UpdateUser, User> {
   protected async transaction(data: UpdateUser): Promise<User | null> {
     const { userId, ...updateData } = data
 
-    const result = await this.database.user.update({
+    return await this.database.user.update({
       where: { id: userId },
       data: {
         ...updateData,
@@ -15,8 +15,6 @@ class UpdateUserService extends BaseService<UpdateUser, User> {
           : undefined,
       },
     })
-
-    return result ?? null
   }
 }
 
