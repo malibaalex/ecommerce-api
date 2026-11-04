@@ -1,7 +1,7 @@
 import BaseMiddleWare from "@/core/base/base-middleware.js"
 import { Request, Response, NextFunction } from "express"
 
-class SignInValidator extends BaseMiddleWare {
+class SignInWithEmailValidator extends BaseMiddleWare {
   protected async middleware(
     req: Request,
     res: Response,
@@ -18,4 +18,4 @@ class SignInValidator extends BaseMiddleWare {
   }
 }
 
-export default SignInValidator
+export default SignInWithEmailValidator

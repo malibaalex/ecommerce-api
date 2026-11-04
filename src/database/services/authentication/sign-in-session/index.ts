@@ -1,4 +1,4 @@
-import CreateSignInSessionService from "./create.js"
+import CreateSignInSessionService from "./sign-in-session-create.js"
 import VerifySignInSessionService from "./sign-in-session-verify.js"
 
 const Create = new CreateSignInSessionService()

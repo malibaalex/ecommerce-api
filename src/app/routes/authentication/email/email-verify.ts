@@ -2,20 +2,20 @@ import Controllers from "@/app/controllers/index.js"
 import Validators from "@/app/validators/index.js"
 import BaseRoute from "@/core/base/base-route.js"
 
-class SignUpRoute extends BaseRoute {
+class VerifyEmailRoute extends BaseRoute {
   constructor(path: string) {
     super(path, {
       method: "post",
-      route: "sign-up",
+      route: "/verify",
       rateLimit: {
         windowMs: 15,
         limit: 10,
-        message: "Too many signup attempts. Please try again in 15 minutes.",
+        message: "Too many signin attempts. Please try again in 15 minutes.",
       },
-      validators: [Validators.Authenticate.SignUp],
-      controller: Controllers.Authenticate.SignUp,
+      validators: [Validators.Authenticate.Email.Verify],
+      controller: Controllers.Authenticate.Email.Verify,
     })
   }
 }
 
-export default SignUpRoute
+export default VerifyEmailRoute

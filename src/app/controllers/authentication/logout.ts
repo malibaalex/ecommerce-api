@@ -9,7 +9,7 @@ class LogOutController extends BaseControlller {
     const token = this.Utils.Token.extractRefresh(req)
 
     if (token) {
-      this.Services.Authenticate.RefreshToken.Revoke.call(token)
+      await this.Services.Authenticate.RefreshToken.Revoke.call(token)
     }
 
     this.Utils.Cookie.clearAuthCookies(res)
