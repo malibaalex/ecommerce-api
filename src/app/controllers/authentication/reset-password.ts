@@ -1,17 +1,14 @@
-// src/app/controllers/authenticate/password/reset-password-controller.ts
 import { Request, Response } from "express"
 import BaseControlller from "@/core/base/base-controller.js"
+import { ValidatorTypes } from "@/app/validators/index.js"
 
 class ResetPasswordController extends BaseControlller {
   protected async module(
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { sessionId, code, newPassword } = req.body as {
-      sessionId: string
-      code: string
-      newPassword: string
-    }
+    const { sessionId, code, newPassword } =
+      req.body as ValidatorTypes["Authenticate"]["Password"]
 
     // Verify session and OTP validity via authentication session verify service
     const user = await this.Services.Authenticate.SignInSession.Verify.call({

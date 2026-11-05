@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
 import mailer from "@/core/utils/mailer.js"
+import { ValidatorTypes } from "@/app/validators/index.js"
 
 const OTP_TTL_MS = 10 * 60 * 1000
 
@@ -10,7 +11,7 @@ class SendOtpController extends BaseControlller {
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { email } = req.body as { email: string }
+    const { email } = req.body as ValidatorTypes["Authenticate"]["Otp"]["Send"]
 
     const user = await this.Services.User.GetByEmail.call(email)
 

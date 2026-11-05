@@ -1,16 +1,14 @@
 import { Request, Response } from "express"
 import BaseControlller from "@/core/base/base-controller.js"
+import { ValidatorTypes } from "@/app/validators/index.js"
 
 class VerifyEmailController extends BaseControlller {
   protected async module(
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { sessionId, code, password } = req.body as {
-      sessionId: string
-      code: string
-      password?: string
-    }
+    const { sessionId, code, password } =
+      req.body as ValidatorTypes["Authenticate"]["Email"]["Verify"]
 
     const user = await this.Services.Authenticate.SignInSession.Verify.call({
       sessionId,

@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
 import mailer from "@/core/utils/mailer.js"
+import { ValidatorTypes } from "@/app/validators/index.js"
 
 const OTP_TTL_MS = 10 * 60 * 1000
 
@@ -10,11 +11,8 @@ class SignInWithEmailController extends BaseControlller {
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { email, provider, password } = req.body as {
-      email: string
-      provider?: "google"
-      password?: string
-    }
+    const { email, provider, password } =
+      req.body as ValidatorTypes["Authenticate"]["Email"]["SignIn"]
 
     if (provider) {
       const redirectUrl =
