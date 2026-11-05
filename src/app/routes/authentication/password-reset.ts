@@ -6,7 +6,7 @@ class ResetPasswordRoute extends BaseRoute {
   constructor(path: string) {
     super(path, {
       method: "post",
-      route: "/password/reset",
+      route: "/password-reset",
       rateLimit: {
         windowMs: 15 * 60 * 1000, // 15 minutes (in milliseconds)
         limit: 5, // Stricter limit to prevent brute-forcing password resets

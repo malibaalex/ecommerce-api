@@ -23,7 +23,7 @@ class GoogleProfile {
       identity: {
         googleSub: raw.sub,
         email: raw.email.toLowerCase(),
-        emailVerified: true,
+        isVerified: true,
         name: typeof raw.name === "string" ? raw.name : null,
       },
     }

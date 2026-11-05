@@ -6,7 +6,7 @@ class SendOtpRoute extends BaseRoute {
   constructor(path: string) {
     super(path, {
       method: "post",
-      route: "/otp/send",
+      route: "/send",
       rateLimit: {
         windowMs: 15 * 60 * 1000,
         limit: 5, // Strict limit for sending OTPs to prevent spam

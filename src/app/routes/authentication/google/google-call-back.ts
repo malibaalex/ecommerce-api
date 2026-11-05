@@ -5,7 +5,7 @@ class GoogleCallbackRoute extends BaseRoute {
   constructor(path: string) {
     super(path, {
       method: "get",
-      route: "/google/callback",
+      route: "/callback",
       rateLimit: { windowMs: 15, limit: 10 },
       controller: Controllers.Authenticate.Google.CallBack,
     })

@@ -1,19 +1,5 @@
 import { UserStatus } from "@/generated/prisma/enums.ts"
 
-/**
-- Represents standard Google OIDC identity claims returned during authentication.
-- Defines core Google account properties including sub, email, verification, and name.
- */
-export interface GoogleIdentity {
-  googleSub: string
-  email: string
-  isVerified: true
-  name: string | null
-}
-
-export interface GoogleUser
-  extends Omit<SafeUser, keyof GoogleIdentity>, GoogleIdentity {}
-
 export interface UserAuthState {
   id: string
   email: string
@@ -22,12 +8,11 @@ export interface UserAuthState {
   hasPassword: boolean
 }
 
-export type UpdateUser = {
-  userId: string
-  email?: string
-  name?: string
-  status?: UserStatus
-  isVerified?: boolean
+export interface GoogleIdentity {
+  googleSub: string
+  email: string
+  isVerified: true
+  name: string | null
 }
 
 export type JwtPayload = {

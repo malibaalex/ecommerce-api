@@ -5,7 +5,6 @@ import { CookieUtils } from "./cookie.js"
 import { OAuthCookieUtil } from "./oauth-cookie.js"
 import OmitProperty from "./omit-property.js"
 import TokenUtils from "./token.js"
-import IsGoogleUser from "./user-utils.js"
 import GoogleProfile from "./google-profile.js"
 import RateLimitUtils from "./rate-limit.js"
 import OtpHasherUtil from "./otp.js"
@@ -24,7 +23,6 @@ export const Utils = {
   Token,
   Cookie,
   OauthCookie,
-  IsGoogleUser,
   env,
   GoogleProfile,
   RateLimits,

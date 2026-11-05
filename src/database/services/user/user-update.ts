@@ -1,6 +1,13 @@
 import BaseService from "@/database/system/base-service.js"
-import { User } from "@/generated/prisma/client.js"
-import { UpdateUser } from "@/types/user.js"
+import { User, UserStatus } from "@/generated/prisma/client.js"
+
+export interface UpdateUser {
+  userId: string
+  email?: string
+  name?: string
+  status?: UserStatus
+  isVerified?: boolean
+}
 
 class UpdateUserService extends BaseService<UpdateUser, User> {
   protected async transaction(data: UpdateUser): Promise<User | null> {

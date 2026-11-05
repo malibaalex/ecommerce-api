@@ -1,7 +1,7 @@
 import GoogleCallbackRoute from "./google-call-back.js"
 import GoogleStartRoute from "./google-start.js"
 
-const PATH = "/auth"
+const PATH = "/auth/google"
 
 const Start = new GoogleStartRoute(PATH)
 const CallBack = new GoogleCallbackRoute(PATH)

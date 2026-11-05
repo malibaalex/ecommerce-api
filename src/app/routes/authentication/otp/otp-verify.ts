@@ -6,7 +6,7 @@ class VerifyOtpRoute extends BaseRoute {
   constructor(path: string) {
     super(path, {
       method: "post",
-      route: "/otp/verify",
+      route: "/verify",
       rateLimit: {
         windowMs: 15 * 60 * 1000,
         limit: 5, // Strict limit to prevent brute-forcing verification codes

@@ -1,12 +1,8 @@
-// src/app/controllers/authenticate/email/sign-in-with-email-controller.ts
 import { Request, Response } from "express"
 import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
 import mailer from "@/core/utils/mailer.js"
 
-const PROVIDER_START_PATH: Record<string, string> = {
-  google: "/api/auth/google/start",
-}
 const OTP_TTL_MS = 10 * 60 * 1000
 
 class SignInWithEmailController extends BaseControlller {
@@ -21,9 +17,18 @@ class SignInWithEmailController extends BaseControlller {
     }
 
     if (provider) {
+      const redirectUrl =
+        provider === "google" ? this.Utils.env.GOOGLE_START_PATH : null
+
+      if (!redirectUrl) {
+        return this.respond(res, "BAD_REQUEST", {
+          message: "Unsupported provider",
+        })
+      }
+
       return this.respond(res, "SUCCESS", {
         message: "Continue with provider",
-        data: { action: "redirect", url: PROVIDER_START_PATH[provider] },
+        data: { action: "redirect", url: redirectUrl },
       })
     }
 
