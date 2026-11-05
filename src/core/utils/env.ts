@@ -12,6 +12,10 @@ const envSchema = z.object({
   GOOGLE_CALLBACK_URL: z.url(),
   APP_URL: z.url(),
 
+  // Resend email verification
+  RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY is required"),
+  EMAIL_FROM: z.string().min(1, "EMAIL_FROM is required"),
+
   // Server
   NODE_ENV: z
     .enum(["development", "test", "production"])

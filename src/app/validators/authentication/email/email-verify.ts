@@ -8,9 +8,12 @@ class VerifyEmailValidator extends BaseMiddleWare {
     next: NextFunction,
   ): Promise<void> {
     const schema = this.z.object({
-      email: this.z
-        .email("Invalid email format")
-        .transform((val) => val.toLowerCase().trim()),
+      sessionId: this.z.string().uuid("Invalid session ID format"),
+      code: this.z.string().length(6, "Verification code must be 6 digits"),
+      password: this.z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .optional(),
     })
 
     this.bodyHandler(req, res, next, schema)

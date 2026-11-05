@@ -1,7 +1,8 @@
+// src/app/controllers/authenticate/email/sign-in-with-email-controller.ts
 import { Request, Response } from "express"
 import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
-// import { sendOtpEmail } from "@/core/mail/mailer.js"
+import mailer from "@/core/utils/mailer.js"
 
 const PROVIDER_START_PATH: Record<string, string> = {
   google: "/api/auth/google/start",
@@ -82,10 +83,9 @@ class SignInWithEmailController extends BaseControlller {
       console.log(`\n[DEV OTP for ${email}]: ${code}\n`)
     }
 
-    // Not awaited: response time shouldn't depend on mail delivery
-    // sendOtpEmail(email, code).catch((err) =>
-    //   console.error("[otp] email failed:", err),
-    // )
+    mailer
+      .sendOtpEmail(email, code, "verification")
+      .catch((err) => console.error("[otp] email failed:", err))
 
     return this.challenge(res, session.sessionId)
   }

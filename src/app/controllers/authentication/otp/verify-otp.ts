@@ -6,39 +6,55 @@ class VerifyOtpController extends BaseControlller {
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { email, code, purpose } = req.body
-
-    const user = await this.Services.User.GetByEmail.call(email)
-    if (!user) {
-      return this.respond(res, "BAD_REQUEST", {
-        message: "Invalid or expired OTP code",
-      })
+    const { sessionId, code, password } = req.body as {
+      sessionId: string
+      code: string
+      password?: string
     }
 
-    const verifiedOtp = await this.Services.Authenticate.OtpCode.Verify.call({
-      userId: user.id,
-      purpose,
+    const user = await this.Services.Authenticate.SignInSession.Verify.call({
+      sessionId,
       code,
     })
 
-    if (!verifiedOtp) {
+    if (!user) {
       return this.respond(res, "BAD_REQUEST", {
-        message: "Invalid or expired OTP code",
+        message: "Invalid or expired code",
       })
     }
 
-    if (purpose === "email_verification") {
-      await this.Services.User.Update.call({
+    if (password) {
+      const set = await this.Services.Authenticate.Password.Set.call({
         userId: user.id,
-        emailVerified: true,
+        password,
       })
-      return this.respond(res, "SUCCESS", {
-        message: "Email verified successfully",
-      })
+      if (!set) {
+        return this.respond(res, "SERVER_ERROR", {
+          message: "Unable to complete sign-in",
+        })
+      }
     }
+
+    const userData = this.Utils.OmitProperty(user, [
+      "status",
+      "updatedAt",
+      "passwordHash",
+    ])
+
+    const accessToken = this.Utils.Token.signAccess({ payload: user })
+    const refreshTokenRaw = this.Utils.Token.signRefresh({ userId: user.id })
+
+    await this.Services.Authenticate.RefreshToken.Save.call({
+      token: refreshTokenRaw,
+      userId: user.id,
+    })
+
+    this.Utils.Cookie.setAccessCookie(res, accessToken)
+    this.Utils.Cookie.setRefreshCookie(res, refreshTokenRaw)
 
     return this.respond(res, "SUCCESS", {
-      message: "OTP verified successfully",
+      message: "Signed in successfully",
+      data: { user: userData },
     })
   }
 }

@@ -1,43 +1,55 @@
 import { Request, Response } from "express"
+import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
-import crypto from "crypto"
+import mailer from "@/core/utils/mailer.js"
+
+const OTP_TTL_MS = 10 * 60 * 1000
 
 class SendOtpController extends BaseControlller {
   protected async module(
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { email, purpose } = req.body
+    const { email } = req.body as { email: string }
 
     const user = await this.Services.User.GetByEmail.call(email)
-    if (!user) {
+
+    // Decoy response to prevent user enumeration
+    if (!user || user.status !== "active") {
       return this.respond(res, "SUCCESS", {
-        message: "If the email exists, an OTP has been sent.",
+        message:
+          "If the details are correct, a verification code has been sent to your email.",
+        data: { action: "verify_otp", sessionId: crypto.randomUUID() },
       })
     }
 
-    const rawCode = crypto.randomInt(100000, 1000000).toString()
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
+    const code = crypto.randomInt(100000, 1000000).toString()
+    const expiresAt = new Date(Date.now() + OTP_TTL_MS)
 
-    const otpRecord = await this.Services.Authenticate.OtpCode.Create.call({
+    const session = await this.Services.Authenticate.SignInSession.Create.call({
       userId: user.id,
-      purpose,
-      code: rawCode,
+      code,
       expiresAt,
     })
 
-    if (!otpRecord) {
+    if (!session) {
       return this.respond(res, "SERVER_ERROR", {
-        message: "Failed to generate OTP code",
+        message: "Unable to start sign-in",
       })
     }
 
     if (this.Utils.env.NODE_ENV === "development") {
-      console.log(`\n [DEV OTP CODE for ${email}]: ${rawCode}\n`)
+      console.log(`\n[DEV OTP for ${email}]: ${code}\n`)
     }
 
+    mailer
+      .sendOtpEmail(email, code)
+      .catch((err) => console.error("[otp] email failed:", err))
+
     return this.respond(res, "SUCCESS", {
-      message: "OTP code sent successfully",
+      message:
+        "If the details are correct, a verification code has been sent to your email.",
+      data: { action: "verify_otp", sessionId: session.sessionId },
     })
   }
 }

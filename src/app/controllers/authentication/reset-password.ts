@@ -1,3 +1,4 @@
+// src/app/controllers/authenticate/password/reset-password-controller.ts
 import { Request, Response } from "express"
 import BaseControlller from "@/core/base/base-controller.js"
 
@@ -6,31 +7,35 @@ class ResetPasswordController extends BaseControlller {
     req: Request,
     res: Response,
   ): Promise<void | Response> {
-    const { email, code, newPassword } = req.body
-
-    const user = await this.Services.User.GetByEmail.call(email)
-    if (!user) {
-      return this.respond(res, "BAD_REQUEST", {
-        message: "Invalid or expired OTP code",
-      })
+    const { sessionId, code, newPassword } = req.body as {
+      sessionId: string
+      code: string
+      newPassword: string
     }
 
-    const verifiedOtp = await this.Services.Authenticate.OtpCode.Verify.call({
-      userId: user.id,
-      purpose: "password_reset",
+    // Verify session and OTP validity via authentication session verify service
+    const user = await this.Services.Authenticate.SignInSession.Verify.call({
+      sessionId,
       code,
     })
 
-    if (!verifiedOtp) {
+    if (!user) {
       return this.respond(res, "BAD_REQUEST", {
-        message: "Invalid or expired OTP code",
+        message: "Invalid or expired code",
       })
     }
 
-    await this.Services.Authenticate.Credential.Reset.call({
+    // Overwrite or update password for password reset flow
+    const updated = await this.Services.Authenticate.Password.Set.call({
       userId: user.id,
-      newPassword,
+      password: newPassword,
     })
+
+    if (!updated) {
+      return this.respond(res, "SERVER_ERROR", {
+        message: "Unable to reset password",
+      })
+    }
 
     return this.respond(res, "SUCCESS", {
       message: "Password updated successfully. Please sign in.",

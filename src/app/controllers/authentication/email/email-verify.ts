@@ -22,22 +22,25 @@ class VerifyEmailController extends BaseControlller {
       })
     }
 
-    // Inbox ownership is now proven. Attach the password only if the account has none.
-    // `updated: false` is fine (the account already had one); only null is a failure.
+    // Inbox ownership is now proven. Attach the password using SetPassword
+    // only if the account has none.
     if (password) {
       const set = await this.Services.Authenticate.Password.Set.call({
         userId: user.id,
         password,
       })
       if (!set) {
-        // The OTP is consumed and the account is verified, so signing in again is safe
         return this.respond(res, "SERVER_ERROR", {
           message: "Unable to complete sign-in",
         })
       }
     }
 
-    const userData = this.Utils.OmitProperty(user, ["status", "updatedAt"])
+    const userData = this.Utils.OmitProperty(user, [
+      "status",
+      "updatedAt",
+      "passwordHash",
+    ])
 
     const accessToken = this.Utils.Token.signAccess({ payload: user })
     const refreshTokenRaw = this.Utils.Token.signRefresh({ userId: user.id })
