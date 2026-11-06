@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="../test-authentication/style/style.css" />
+    <script type="module" src="../test-authentication/js/dashboard.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+        </svg>
+        <span>Auth sandbox</span>
+      </div>
+      <div class="topbar-right">
+        <span id="topbar-avatar"><span class="avatar">?</span></span>
+        <button
+          class="btn btn-inline btn-danger-outline"
+          id="logout"
+          type="button"
+        >
+          Sign out
+        </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="card">
+        <div class="profile">
+          <span id="avatar-slot"><span class="avatar">?</span></span>
+          <div class="profile-meta">
+            <div class="title-badge-row">
+              <h1 id="name" class="skeleton">Loading profile…</h1>
+              <span id="verified-badge" class="badge" hidden>Verified</span>
+            </div>
+            <p id="email" class="sub"></p>
+            <p id="uid" class="uid-tag"></p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-inline" id="reload" type="button">
+            Reload profile
+          </button>
+          <button
+            class="btn btn-inline btn-secondary"
+            id="refresh"
+            type="button"
+          >
+            Refresh token
+          </button>
+          <span id="refresh-status" class="sub status-text"></span>
+        </div>
+
+        <details class="raw">
+          <summary>Raw response payload</summary>
+          <pre id="raw">{}</pre>
+        </details>
+      </section>
+    </main>
+
+    <details class="log">
+      <summary>
+        <span>Network request log</span>
+        <button class="link-btn" id="log-clear" type="button">Clear</button>
+      </summary>
+      <div id="log-entries">
+        <p class="log-empty">Requests will appear here.</p>
+      </div>
+    </details>
+  </body>
+</html>
