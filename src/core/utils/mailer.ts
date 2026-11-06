@@ -1,8 +1,7 @@
-// src/core/utils/mailer.ts
 import { Resend } from "resend"
 import { env } from "@/core/utils/env.js"
 
-export class Mailer {
+export class MailerUtil {
   private resend: Resend
 
   constructor() {
@@ -39,4 +38,4 @@ export class Mailer {
   }
 }
 
-export default new Mailer()
+export default MailerUtil

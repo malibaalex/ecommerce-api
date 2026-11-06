@@ -3,12 +3,11 @@ import { Request, Response, NextFunction } from "express"
 
 class PasswordSignInValidator extends BaseMiddleWare {
   schema = this.z.object({
-    sessionId: this.z.uuid("Invalid session ID format"),
-    code: this.z.string().length(6, "Verification code must be 6 digits"),
-    password: this.z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .optional(),
+    email: this.z
+      .email("Invalid email format")
+      .transform((value) => value.toLowerCase().trim()),
+
+    password: this.z.string().min(8, "Password must be at least 8 characters"),
   })
 
   protected async middleware(

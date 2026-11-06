@@ -6,10 +6,26 @@ class ProvisionPendingUserService extends BaseService<string, UserAuthState> {
     const user = await this.database.user.upsert({
       where: { email },
       update: {},
-      create: { email, isVerified: false },
-      select: { id: true, email: true, status: true, isVerified: true },
+      create: {
+        email,
+        isVerified: false,
+      },
+      select: {
+        id: true,
+        email: true,
+        status: true,
+        isVerified: true,
+        passwordHash: true,
+      },
     })
-    return { ...user, hasPassword: false }
+
+    return {
+      id: user.id,
+      email: user.email,
+      status: user.status,
+      isVerified: user.isVerified,
+      hasPassword: user.passwordHash !== null,
+    }
   }
 }
 

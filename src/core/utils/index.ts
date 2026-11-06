@@ -8,6 +8,7 @@ import TokenUtils from "./token.js"
 import GoogleProfile from "./google-profile.js"
 import RateLimitUtils from "./rate-limit.js"
 import OtpHasherUtil from "./otp.js"
+import MailerUtil from "./mailer.js"
 
 const Token = new TokenUtils(env)
 const Cookie = new CookieUtils(env)
@@ -15,6 +16,7 @@ const OauthCookie = new OAuthCookieUtil(env)
 const Password = new PasswordUtil()
 const RateLimits = new RateLimitUtils()
 const OtpHasher = new OtpHasherUtil()
+const Mailer = new MailerUtil()
 
 export const Utils = {
   port,
@@ -27,4 +29,5 @@ export const Utils = {
   GoogleProfile,
   RateLimits,
   OtpHasher,
+  Mailer,
 } as const

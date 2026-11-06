@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import BaseControlller from "@/core/base/base-controller.js"
+import BaseController from "@/core/base/base-controller.js"
 import { ValidatorTypes } from "@/app/validators/index.js"
 
-class VerifyOtpController extends BaseControlller {
+class VerifyOtpController extends BaseController {
   protected async module(
     req: Request,
     res: Response,
@@ -22,13 +22,20 @@ class VerifyOtpController extends BaseControlller {
     }
 
     if (password) {
-      const set = await this.Services.Authenticate.Password.Set.call({
+      if (user.passwordHash !== null) {
+        return this.respond(res, "BAD_REQUEST", {
+          message: "A password is already configured for this account",
+        })
+      }
+
+      const result = await this.Services.Authenticate.Password.Set.call({
         userId: user.id,
         password,
       })
-      if (!set) {
-        return this.respond(res, "SERVER_ERROR", {
-          message: "Unable to complete sign-in",
+
+      if (!result?.updated) {
+        return this.respond(res, "BAD_REQUEST", {
+          message: "Unable to set the initial password",
         })
       }
     }
@@ -39,8 +46,13 @@ class VerifyOtpController extends BaseControlller {
       "passwordHash",
     ])
 
-    const accessToken = this.Utils.Token.signAccess({ payload: user })
-    const refreshTokenRaw = this.Utils.Token.signRefresh({ userId: user.id })
+    const accessToken = this.Utils.Token.signAccess({
+      payload: user,
+    })
+
+    const refreshTokenRaw = this.Utils.Token.signRefresh({
+      userId: user.id,
+    })
 
     await this.Services.Authenticate.RefreshToken.Save.call({
       token: refreshTokenRaw,
@@ -52,7 +64,9 @@ class VerifyOtpController extends BaseControlller {
 
     return this.respond(res, "SUCCESS", {
       message: "Signed in successfully",
-      data: { user: userData },
+      data: {
+        user: userData,
+      },
     })
   }
 }

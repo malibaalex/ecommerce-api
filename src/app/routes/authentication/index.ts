@@ -15,7 +15,7 @@ const AuthRoutes = {
   GoogleStart: Google.Start,
   GoogleCallBack: Google.CallBack,
   EmailSignIn: Email.SignIn,
-  EmailVerify: Email.Verify,
+  EmailSignInWithPassword: Email.SignInWithPassword,
   LogOut,
   Refresh,
   OtpSend: Otp.Send,

@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
-import mailer from "@/core/utils/mailer.js"
 import { ValidatorTypes } from "@/app/validators/index.js"
 
 const OTP_TTL_MS = 10 * 60 * 1000
@@ -42,10 +41,13 @@ class SendOtpController extends BaseControlller {
       console.log(`\n[DEV OTP for ${email}]: ${code}\n`)
     }
 
-    mailer
-      .sendOtpEmail(email, code)
-      .catch((err) => console.error("[otp] email failed:", err))
+    const isPasswordReset = req.body.purpose === "password_reset"
 
+    this.Utils.Mailer.sendOtpEmail(
+      email,
+      code,
+      isPasswordReset ? "password_reset" : "verification",
+    ).catch((err) => console.error("[otp] email failed:", err))
     return this.respond(res, "SUCCESS", {
       message:
         "If the details are correct, a verification code has been sent to your email.",

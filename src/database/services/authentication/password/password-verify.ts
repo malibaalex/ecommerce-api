@@ -12,11 +12,14 @@ class VerifyPasswordService extends BaseService<VerifyPasswordInput, User> {
       where: { email: data.email },
     })
 
-    const ok = await this.Password.verifyOrDummy(
+    const isValid = await this.Password.verifyOrDummy(
       user?.passwordHash,
       data.password,
     )
-    if (!user || !ok) return null
+
+    if (!user || user.status !== "active" || !isValid) {
+      return null
+    }
 
     return user
   }
