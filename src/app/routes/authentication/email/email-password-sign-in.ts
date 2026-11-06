@@ -1,22 +1,21 @@
-// src/app/routes/authenticate/email/verify-email-route.ts
 import Controllers from "@/app/controllers/index.js"
 import Validators from "@/app/validators/index.js"
 import BaseRoute from "@/core/base/base-route.js"
 
-class VerifyEmailRoute extends BaseRoute {
+class SignInWithEmailAndPassword extends BaseRoute {
   constructor(path: string) {
     super(path, {
       method: "post",
-      route: "/verify",
+      route: "/password",
       rateLimit: {
         windowMs: 15,
         limit: 10,
         message: "Too many attempts. Please try again in 15 minutes.",
       },
-      validators: [Validators.Authenticate.Email.Verify],
-      controller: Controllers.Authenticate.Email.Verify,
+      validators: [Validators.Authenticate.Email.PasswordSignIn],
+      controller: Controllers.Authenticate.Email.SignInWithPassWord,
     })
   }
 }
 
-export default VerifyEmailRoute
+export default SignInWithEmailAndPassword

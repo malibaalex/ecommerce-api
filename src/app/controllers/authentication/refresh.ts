@@ -24,7 +24,11 @@ class RefreshController extends BaseControlller {
     }
 
     const user = rotated.user
-    const userData = this.Utils.OmitProperty(user, ["status", "updatedAt"])
+    const userData = this.Utils.OmitProperty(user, [
+      "status",
+      "updatedAt",
+      "passwordHash",
+    ])
 
     const accessToken = this.Utils.Token.signAccess({ payload: user })
 

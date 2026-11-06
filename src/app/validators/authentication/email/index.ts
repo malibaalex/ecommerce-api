@@ -1,12 +1,12 @@
+import PasswordSignInValidator from "./email-password-sign-in.js.js"
 import SignInWithEmailValidator from "./email-sign-in.js"
-import VerifyEmailValidator from "./email-verify.js"
 
 const SignIn = new SignInWithEmailValidator()
-const Verify = new VerifyEmailValidator()
+const PasswordSignIn = new PasswordSignInValidator()
 
 const Email = {
   SignIn,
-  Verify,
+  PasswordSignIn,
 }
 
 export default Email

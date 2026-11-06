@@ -2,13 +2,13 @@ import { Request, Response } from "express"
 import BaseControlller from "@/core/base/base-controller.js"
 import { ValidatorTypes } from "@/app/validators/index.js"
 
-class VerifyEmailController extends BaseControlller {
+class PasswordSignInController extends BaseControlller {
   protected async module(
     req: Request,
     res: Response,
   ): Promise<void | Response> {
     const { sessionId, code, password } =
-      req.body as ValidatorTypes["Authenticate"]["Email"]["Verify"]
+      req.body as ValidatorTypes["Authenticate"]["Email"]["PasswordSignIn"]
 
     const user = await this.Services.Authenticate.SignInSession.Verify.call({
       sessionId,
@@ -20,8 +20,6 @@ class VerifyEmailController extends BaseControlller {
       })
     }
 
-    // Inbox ownership is now proven. Attach the password using SetPassword
-    // only if the account has none.
     if (password) {
       const set = await this.Services.Authenticate.Password.Set.call({
         userId: user.id,
@@ -58,4 +56,4 @@ class VerifyEmailController extends BaseControlller {
   }
 }
 
-export default VerifyEmailController
+export default PasswordSignInController

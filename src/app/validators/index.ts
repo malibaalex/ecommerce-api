@@ -11,7 +11,7 @@ export type ValidatorTypes = {
   Authenticate: {
     Email: {
       SignIn: z.infer<typeof Authenticate.Email.SignIn.schema>
-      Verify: z.infer<typeof Authenticate.Email.Verify.schema>
+      PasswordSignIn: z.infer<typeof Authenticate.Email.PasswordSignIn.schema>
     }
     Otp: {
       Send: z.infer<typeof Authenticate.Otp.Send.schema>

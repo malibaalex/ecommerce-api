@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import crypto from "node:crypto"
 import BaseControlller from "@/core/base/base-controller.js"
-import mailer from "@/core/utils/mailer.js"
 import { ValidatorTypes } from "@/app/validators/index.js"
 
 const OTP_TTL_MS = 10 * 60 * 1000
@@ -81,14 +80,6 @@ class SignInWithEmailController extends BaseControlller {
         message: "Unable to start sign-in",
       })
     }
-
-    if (this.Utils.env.NODE_ENV === "development") {
-      console.log(`\n[DEV OTP for ${email}]: ${code}\n`)
-    }
-
-    mailer
-      .sendOtpEmail(email, code, "verification")
-      .catch((err) => console.error("[otp] email failed:", err))
 
     return this.challenge(res, session.sessionId)
   }

@@ -1,12 +1,12 @@
+import PasswordSignInController from "./email-password-sign-in.js"
 import SignInWithEmailController from "./email-sign-in.js"
-import VerifyEmailController from "./email-verify.js"
 
 const SignIn = new SignInWithEmailController()
-const Verify = new VerifyEmailController()
+const SignInWithPassWord = new PasswordSignInController()
 
 const Email = {
   SignIn,
-  Verify,
+  SignInWithPassWord,
 }
 
 export default Email

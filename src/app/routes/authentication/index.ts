@@ -5,7 +5,7 @@ import Otp from "./otp/index.js"
 import ResetPasswordRoute from "./password-reset.js"
 import RefreshTokenRoute from "./refresh.js"
 
-const PATH = "/auth/"
+const PATH = "/auth"
 
 const LogOut = new LogOutRoute(PATH)
 const Refresh = new RefreshTokenRoute(PATH)

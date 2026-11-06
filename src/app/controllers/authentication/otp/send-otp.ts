@@ -15,7 +15,6 @@ class SendOtpController extends BaseControlller {
 
     const user = await this.Services.User.GetByEmail.call(email)
 
-    // Decoy response to prevent user enumeration
     if (!user || user.status !== "active") {
       return this.respond(res, "SUCCESS", {
         message:

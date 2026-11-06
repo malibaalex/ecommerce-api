@@ -1,7 +1,7 @@
 import BaseMiddleWare from "@/core/base/base-middleware.js"
 import { Request, Response, NextFunction } from "express"
 
-class VerifyEmailValidator extends BaseMiddleWare {
+class PasswordSignInValidator extends BaseMiddleWare {
   schema = this.z.object({
     sessionId: this.z.uuid("Invalid session ID format"),
     code: this.z.string().length(6, "Verification code must be 6 digits"),
@@ -20,4 +20,4 @@ class VerifyEmailValidator extends BaseMiddleWare {
   }
 }
 
-export default VerifyEmailValidator
+export default PasswordSignInValidator

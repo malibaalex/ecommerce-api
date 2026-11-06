@@ -1,7 +1,7 @@
 import port from "./port.js"
 import { PasswordUtil } from "./password.js"
 import { env } from "./env.js"
-import { CookieUtils } from "./cookie.js"
+import CookieUtils from "./cookie.js"
 import { OAuthCookieUtil } from "./oauth-cookie.js"
 import OmitProperty from "./omit-property.js"
 import TokenUtils from "./token.js"
